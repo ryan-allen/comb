@@ -1,0 +1,2 @@
+run ../bin/comb ./js > output.js
+then open container.html
