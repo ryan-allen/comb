@@ -1,3 +1,3 @@
 #!/usr/bin/env ruby
 require_relative '../lib/comb'
-Comb.assemble(ARGV[0])
+puts Comb.assemble(ARGV[0])
