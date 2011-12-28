@@ -26,9 +26,7 @@ var require = modules.require
       out << <<-eos
 // #{file} => #{mod}
 modules.register('#{mod}', function() {
-  var exports = {}
 #{File.open(path) { |f| f.read }.split("\n").collect { |line| "  #{line}" }.join("\n")}
-  return exports
 })
       eos
     end
