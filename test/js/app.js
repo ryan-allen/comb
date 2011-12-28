@@ -1,8 +1,8 @@
-exports.run = function() {
-  var textbox = require('widgets/textbox')
-  var emailbox = require('widgets/emailbox')
-  var uri = require('utils/uri')
-  alert(uri.bestUri)
-  var bdays = require('utils/date')
-  bdays.whatsMyBday()
+return {
+  run: function() {
+    var uri = require('utils/uri')
+    var bdays = require('utils/date')
+    alert(uri.bestUri)
+    bdays.whatsMyBday() // calls alert itself
+  }
 }
