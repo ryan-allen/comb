@@ -1,3 +1,3 @@
-module Comb
-  VERSION = "0.0.3"
+class Comb
+  VERSION = '0.0.4'
 end
