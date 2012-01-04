@@ -1,4 +1,5 @@
 require_relative 'comb/version'
+require 'json'
 require 'time'
 
 class Comb
@@ -21,7 +22,10 @@ public
     mark_start_of_output
     append_require_snippet
     for_each_js_module do |name, code|
-      append_to_output(name, code)
+      append_module(name, code)
+    end
+    for_each_html_template do |name, template|
+      append_template(name, template)
     end
     mark_end_of_output
     return_output
@@ -47,7 +51,15 @@ require.register = function(module, code) {
   end
 
   def for_each_js_module
-    Dir.glob(@path_to_modules + '/**/*.js').each do |path| 
+    for_each_file('js') { |name, code| yield name, code }
+  end
+
+  def for_each_html_template
+    for_each_file('html') { |name, template| yield name, template }
+  end
+
+  def for_each_file(ext)
+    Dir.glob(@path_to_modules + "/**/*.#{ext}").each do |path| 
       # get the module 'name' by removing the path and the extension
       name = path.gsub(@path_to_modules, '').gsub(/^\//, '').gsub(/\.js$/, '')
       code = File.open(path) { |f| f.read }
@@ -55,10 +67,19 @@ require.register = function(module, code) {
     end
   end
 
-  def append_to_output(name, code)
+  def append_module(name, code)
       @output << (<<-eos
 require.register('#{name}', function() {
 #{indent_code(code)}
+})
+      eos
+      ).chomp
+  end
+
+  def append_template(name, template)
+      @output << (<<-eos
+require.register('#{name}', function() {
+  return #{template.gsub("\n", ' ').gsub(/\s+/, ' ' ).strip.to_json}
 })
       eos
       ).chomp
